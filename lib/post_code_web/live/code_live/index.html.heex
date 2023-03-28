@@ -1,0 +1,49 @@
+<.header>
+  Listing Codes
+  <:actions>
+    <.link patch={~p"/codes/new"}>
+      <.button>New Code</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="codes"
+  rows={@streams.codes}
+  row_click={fn {_id, code} -> JS.navigate(~p"/codes/#{code}") end}
+>
+  <:col :let={{_id, code}} label="Postcode"><%= code.postcode %></:col>
+  <:col :let={{_id, code}} label="Eastings"><%= code.eastings %></:col>
+  <:col :let={{_id, code}} label="Northings"><%= code.northings %></:col>
+  <:col :let={{_id, code}} label="Latitude"><%= code.latitude %></:col>
+  <:col :let={{_id, code}} label="Longitude"><%= code.longitude %></:col>
+  <:col :let={{_id, code}} label="Town"><%= code.town %></:col>
+  <:col :let={{_id, code}} label="Region"><%= code.region %></:col>
+  <:col :let={{_id, code}} label="Country code"><%= code.country_code %></:col>
+  <:col :let={{_id, code}} label="Country"><%= code.country %></:col>
+  <:action :let={{_id, code}}>
+    <div class="sr-only">
+      <.link navigate={~p"/codes/#{code}"}>Show</.link>
+    </div>
+    <.link patch={~p"/codes/#{code}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, code}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: code.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="code-modal" show on_cancel={JS.patch(~p"/codes")}>
+  <.live_component
+    module={PostCodeWeb.CodeLive.FormComponent}
+    id={@code.id || :new}
+    title={@page_title}
+    action={@live_action}
+    code={@code}
+    patch={~p"/codes"}
+  />
+</.modal>
