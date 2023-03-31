@@ -8,7 +8,17 @@ defmodule PostCode.CodesTest do
 
     import PostCode.CodesFixtures
 
-    @invalid_attrs %{country: nil, country_code: nil, eastings: nil, latitude: nil, longitude: nil, northings: nil, postcode: nil, region: nil, town: nil}
+    @invalid_attrs %{
+      country: nil,
+      country_code: nil,
+      eastings: nil,
+      latitude: nil,
+      longitude: nil,
+      northings: nil,
+      postcode: nil,
+      region: nil,
+      town: nil
+    }
 
     test "list_codes/0 returns all codes" do
       code = code_fixture()
@@ -21,7 +31,17 @@ defmodule PostCode.CodesTest do
     end
 
     test "create_code/1 with valid data creates a code" do
-      valid_attrs = %{country: "some country", country_code: "some country_code", eastings: "some eastings", latitude: 120.5, longitude: 120.5, northings: "some northings", postcode: "some postcode", region: "some region", town: "some town"}
+      valid_attrs = %{
+        country: "some country",
+        country_code: "some country_code",
+        eastings: "some eastings",
+        latitude: 120.5,
+        longitude: 120.5,
+        northings: "some northings",
+        postcode: "some postcode",
+        region: "some region",
+        town: "some town"
+      }
 
       assert {:ok, %Code{} = code} = Codes.create_code(valid_attrs)
       assert code.country == "some country"
@@ -41,7 +61,18 @@ defmodule PostCode.CodesTest do
 
     test "update_code/2 with valid data updates the code" do
       code = code_fixture()
-      update_attrs = %{country: "some updated country", country_code: "some updated country_code", eastings: "some updated eastings", latitude: 456.7, longitude: 456.7, northings: "some updated northings", postcode: "some updated postcode", region: "some updated region", town: "some updated town"}
+
+      update_attrs = %{
+        country: "some updated country",
+        country_code: "some updated country_code",
+        eastings: "some updated eastings",
+        latitude: 456.7,
+        longitude: 456.7,
+        northings: "some updated northings",
+        postcode: "some updated postcode",
+        region: "some updated region",
+        town: "some updated town"
+      }
 
       assert {:ok, %Code{} = code} = Codes.update_code(code, update_attrs)
       assert code.country == "some updated country"
@@ -70,6 +101,17 @@ defmodule PostCode.CodesTest do
     test "change_code/1 returns a code changeset" do
       code = code_fixture()
       assert %Ecto.Changeset{} = Codes.change_code(code)
+    end
+
+    test "get_data/1 with invalid return 0" do
+      query =
+        from u in "codes",
+          where: fragment("lower(?)", u.region) == "liverpool",
+          select: {u.postcode, u.region}
+
+      lista = Codes.get_all(query)
+      IO.inspect(lista)
+      assert lista != %{}
     end
   end
 end

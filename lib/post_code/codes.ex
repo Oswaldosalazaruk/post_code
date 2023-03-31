@@ -101,4 +101,12 @@ defmodule PostCode.Codes do
   def change_code(%Code{} = code, attrs \\ %{}) do
     Code.changeset(code, attrs)
   end
+
+  def get_all(query) do
+    Repo.all(query)
+  end
+
+  def get_post(postcode) do
+    Repo.get_by!(Code, postcode: postcode)
+  end
 end

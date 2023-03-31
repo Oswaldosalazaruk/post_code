@@ -33,4 +33,11 @@ defmodule PostCode.ReadData do
 
     # |> Enum.into(%{})
   end
+
+  def geolocation(postcode) do
+    mycode = Codes.get_post(postcode)
+    latitude = Map.get(mycode, :latitude)
+    longitude = Map.get(mycode, :longitude)
+    {latitude, longitude}
+  end
 end
