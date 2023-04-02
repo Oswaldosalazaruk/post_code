@@ -2,7 +2,7 @@ defmodule PostCode.Codes do
   @moduledoc """
   The Codes context.
   """
-
+  import Ecto.Query, only: [from: 2]
   import Ecto.Query, warn: false
   alias PostCode.Repo
 
@@ -108,5 +108,12 @@ defmodule PostCode.Codes do
 
   def get_post(postcode) do
     Repo.get_by!(Code, postcode: postcode)
+  end
+
+  def search(searchtext) do
+    query =
+      from u in Code,
+        where: fragment("lower(?)", u.region) == ^searchtext
+    get_all(query)
   end
 end

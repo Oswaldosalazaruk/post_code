@@ -11,8 +11,30 @@ defmodule PostCodeWeb.CodeLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    searchtext = "liverpool"
+
+    if params == nil do
+      ^searchtext = Map.get(params, "search")
+    end
+
+    {
+      :noreply,
+      socket
+      |> assign(:params, params)
+      |> assign(:codes, Codes.search(searchtext))
+      |> apply_action(socket.assigns.live_action, params)
+    }
   end
+
+  def update(params, _session, socket) do
+    searchtext = Map.get(params, "search")
+    {:ok, stream(socket, :codes, Codes.search(searchtext))}
+  end
+
+  # @impl true
+  # def handle_params(params, _url, socket) do
+  #   {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  # end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
@@ -36,6 +58,7 @@ defmodule PostCodeWeb.CodeLive.Index do
   def handle_info({PostCodeWeb.CodeLive.FormComponent, {:saved, code}}, socket) do
     {:noreply, stream_insert(socket, :codes, code)}
   end
+
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do

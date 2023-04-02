@@ -24,6 +24,7 @@ defmodule PostCodeWeb.Router do
 
     live "/codes/:id", CodeLive.Show, :show
     live "/codes/:id/show/edit", CodeLive.Show, :edit
+    live "/tabla", CodeLive.Tabla
   end
 
   # Other scopes may use custom stacks.
