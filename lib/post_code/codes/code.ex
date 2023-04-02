@@ -34,14 +34,8 @@ defmodule PostCode.Codes.Code do
     ])
     |> validate_required([
       :postcode,
-      :eastings,
-      :northings,
       :latitude,
-      :longitude,
-      :town,
-      :region,
-      :country_code,
-      :country
+      :longitude
     ])
     |> unique_constraint(:postcode)
   end

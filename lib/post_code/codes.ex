@@ -113,7 +113,10 @@ defmodule PostCode.Codes do
   def search(searchtext) do
     query =
       from u in Code,
-        where: fragment("lower(?)", u.region) == ^searchtext
+        where: fragment(
+          "region @@ websearch_to_tsquery(?)",
+          ^searchtext
+        )
     get_all(query)
   end
 end

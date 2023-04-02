@@ -12,11 +12,12 @@ defmodule PostCodeWeb.CodeLive.Tabla do
   @impl true
   def handle_event("update", params, socket) do
     searchtext = Map.get(params, "search")
-
+    
     {
       :noreply,
       socket
       |> assign(:params, params)
+      |> assign(:searchtext, searchtext)
       |> assign(:codes, Codes.search(searchtext))
 
     }
